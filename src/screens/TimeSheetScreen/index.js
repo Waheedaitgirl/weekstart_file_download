@@ -63,7 +63,8 @@ const MODULE_ID = '52'
                 onDelete={() => getList()}
             />
           ); 
-        const renderHiddenItem = (data, rowMap) => {
+        const renderHiddenItem = (data, rowMap ,) => {
+            
             return(
                 <View style ={styles.HiddenBtnView} >
                     <Pressable  
@@ -84,6 +85,10 @@ const MODULE_ID = '52'
                     </Pressable>
                 </View>
             )
+            
+            
+           
+           
         }    
         const onRowDidOpen = rowKey => {
             console.log("This row opened", rowKey);

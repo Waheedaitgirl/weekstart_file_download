@@ -6,6 +6,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {colors} from './src/constants/theme';
 import MainApp from './src/navigation';
 import {persistor, store} from './src/store/index';
+
 const App = () => {
   return (
     <Provider store={store}>
