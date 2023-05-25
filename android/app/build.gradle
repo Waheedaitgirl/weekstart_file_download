@@ -168,3 +168,21 @@ dependencies {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+// android {
+// ....
+//   signingConfigs {
+//   release {
+//     storeFile file('your_key_name.keystore')
+//     storePassword System.console().readLine("\nKeystore password:")
+//     keyAlias System.console().readLine("\nAlias: ")
+//     keyPassword System.console().readLine("\Alias password: ")
+//    }
+// }
+//   buildTypes {
+//     release {
+//       ....
+//       signingConfig signingConfigs.release
+//     }
+//   }
+// }

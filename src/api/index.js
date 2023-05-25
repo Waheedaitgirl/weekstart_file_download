@@ -53,7 +53,7 @@ export function getStatusList(id){
 }
 
 export function getLeavesList(approver_id,account_id,approver_type,user_type,placement_approver_module_id, placement_approver_module_pk_id){
-        console.log(`approver?approver_id=${approver_id}&status=all_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`)
+        // console.log(`approver?approver_id=${approver_id}&status=all_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`)
     return request({
         url: `approver?approver_id=${approver_id}&status=all_leaves&account_id=${account_id}&approver_type=${approver_type}`,
         method: 'get',
@@ -61,7 +61,7 @@ export function getLeavesList(approver_id,account_id,approver_type,user_type,pla
 }
 
 export function AcceptorRejectLeaves(candidate_id,account_id,status,leaves_id){
-    console.log(`leaves?candidate_id=${candidate_id}&type=accept_reject&account_id=${account_id}&status=${status}&leaves_id=${leaves_id}`);
+    // console.log(`leaves?candidate_id=${candidate_id}&type=accept_reject&account_id=${account_id}&status=${status}&leaves_id=${leaves_id}`);
     return request({
         url: `leaves?candidate_id=${candidate_id}&type=accept_reject&account_id=${account_id}&status=${status}&leaves_id=${leaves_id}`,
         method: 'get',
