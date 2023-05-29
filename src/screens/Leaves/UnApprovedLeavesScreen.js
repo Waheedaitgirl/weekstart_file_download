@@ -8,7 +8,7 @@ import { colors } from '../../constants/theme';
 import { useSelector } from 'react-redux';
 import Spacer from '../../components/Spacer';
         
-import {getLeavesList, AcceptorRejectLeaves } from '../../api';
+import {getUnapprovedLeavesList, AcceptorRejectLeaves } from '../../api';
 import CustomStatusBar from '../../components/StatusBar';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -30,7 +30,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
         getLeavesListLocal = () => {
             setLoading(true)
             
-            getLeavesList(user.id,user.account_id,"2",user_type,placement_approver_module_id, placement_approver_module_pk_id)
+            getUnapprovedLeavesList(user.id,user.account_id,"2",user_type,placement_approver_module_id, placement_approver_module_pk_id)
             .then((response) => {
                 
                 if(response.status == 200){
@@ -159,7 +159,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
                         NotificationPress={() => alert("NotificationPress")}
                         FilterPress={(data) => alert(data)}
                         onPress={() => navigation.goBack()}
-                        title={"All Leaves"}
+                        title={"Un-approved-Leaves"}
                     />
                     <Spacer height={verticalScale(100)} />
                     <ActivityIndicator size={"large"} color={colors.dark_primary_color} />
@@ -178,7 +178,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
                             NotificationPress={() => alert("NotificationPress")}
                             FilterPress={(data) => alert(data)}
                             onPress={() => navigation.goBack()}
-                            title={"All Leaves"}
+                            title={"Un-Approved-Leaves"}
                         />
                  
                     <SwipeListView 

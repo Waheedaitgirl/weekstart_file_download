@@ -118,13 +118,13 @@ const SignInScreen = ({navigation}) => {
                 :null
               }
               </View>
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => navigation.navigate(AuthRoutes.ForgotPasswordScreen)}
                 style={{width: AppScreenWidth, alignItems: 'flex-end'}}>
                 <Text style={{...textStyles.title, color:colors.dark_primary_color}}>
                   Forgot Password?
                 </Text>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
 
               <Spacer />
               <CustomButton

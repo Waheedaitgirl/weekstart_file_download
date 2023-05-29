@@ -8,7 +8,7 @@ import { colors } from '../../constants/theme';
 import { useSelector } from 'react-redux';
 import Spacer from '../../components/Spacer';
         
-import {getLeavesList, AcceptorRejectLeaves } from '../../api';
+import {getAllLeavesList, AcceptorRejectLeaves } from '../../api';
 import CustomStatusBar from '../../components/StatusBar';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -16,7 +16,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
     const AllLeavesScreen = ({navigation}) => {
         const {user, user_type, placement_approver_module_id,placement_approver_module_pk_id} = useSelector(state => state.LoginReducer)
-        const [data, setData] = useState([])
+        const [data, setData] = useState(true)
         const [loading, setLoading ] = useState(true)
         const [error, setError] = useState(false)
         const [error_message , setErrorMessage] = useState("")
@@ -29,8 +29,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
         getLeavesListLocal = () => {
             setLoading(true)
-           
-            getLeavesList(user.id,user.account_id,"899",user_type,placement_approver_module_id, placement_approver_module_pk_id)
+           console.log(user,
+            user_type,
+            placement_approver_module_id,
+             placement_approver_module_pk_id)
+            getAllLeavesList(user.id,user.account_id,'1',user_type,placement_approver_module_id, placement_approver_module_pk_id)
             .then((response) => {
                 
                 if(response.status == 200){
@@ -159,7 +162,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
                         NotificationPress={() => alert("NotificationPress")}
                         FilterPress={(data) => alert(data)}
                         onPress={() => navigation.goBack()}
-                        title={"Un-approved Leaves"}
+                        title={"All Leaves"}
                     />
                     <Spacer height={verticalScale(100)} />
                     <ActivityIndicator size={"large"} color={colors.dark_primary_color} />
@@ -178,7 +181,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
                             NotificationPress={() => alert("NotificationPress")}
                             FilterPress={(data) => alert(data)}
                             onPress={() => navigation.goBack()}
-                            title={"Un-approved Leaves"}
+                            title={"All Leaves"}
                         />
                  
                     <SwipeListView 

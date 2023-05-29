@@ -20,18 +20,18 @@ const DrawerContentt = ({ navigation, props }) => {
                         justifyContent:"flex-start"}} > 
                         <View style={styles.drawercontent}>  
                             <Image 
-                                source={require("../assets/images/dummy.png")} 
+                                source={require("../assets/images/avatar.png")} 
                                 style={{
-                                    width:scale(70),
+                                    width:scale(50),
                                     borderRadius:scale(100),
-                                    height:scale(70), 
+                                    height:scale(50), 
                                     resizeMode:"cover"
                                 }}
                             />
                             <View style={{justifyContent:"flex-start"}}>
-                                <Text style={styles.textStyleHeader}>Aftab Ameen</Text>
+                                <Text style={styles.textStyleHeader}>Waheeda Rahim</Text>
                             </View> 
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                // onPress={() => navigation.navigate(MainRoutes.EditProfileScreen) }
                                 style={{
                                     position:"absolute",
@@ -39,7 +39,7 @@ const DrawerContentt = ({ navigation, props }) => {
                                     right:scale(10)
                                 }} >
                                 <Entypo name="edit" color={"#fff"} size={scale(20)} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                         <TouchableOpacity   
                             onPress={() => navigation.navigate(MainRoutes.HomeScreen)} 
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     textStyleHeader: {
         marginLeft:scale(10), 
         fontFamily:fonts.Medium,
-        fontSize:scale(12),
+        fontSize:scale(10),
         color: colors.white
     }
 })
