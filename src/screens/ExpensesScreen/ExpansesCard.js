@@ -16,7 +16,7 @@ import Job from '../../assets/images/job.svg'
 import transform from 'css-to-react-native';
 import { RFValue } from "react-native-responsive-fontsize";
 FontAwesome.loadFont();
-const ExpansesItem = memo(({item, billtype, company, status,date,List, job,status_colour_code, price}) => {
+const ExpansesItem = memo(({item, billtype, type, status,date,List, job,status_colour_code, price,user_id}) => {
     let arr = (status_colour_code.split(";"))
     const [isVisible ,setIsVisible] = useState(false)
     const ss = transform([
@@ -61,7 +61,7 @@ const ExpansesItem = memo(({item, billtype, company, status,date,List, job,statu
                         size={scale(18)} 
                     />
                 </View>
-                <Text style={styles.textStyle}>{company}</Text>
+                <Text style={styles.textStyle}>{type}</Text>
             </View>
             
            

@@ -3,7 +3,10 @@ export const AuthRoutes = {
     WelcomeScreen:"WelcomeScreen",
     SignInScreen:"SignInScreen",
     SignUpScreen:"SignUpScreen",
-    ForgotPasswordScreen:"ForgotPasswordScreen"
+    ForgotPasswordScreen:"ForgotPasswordScreen",
+    VerifyCodeScreen:"VerifyCodeScreen",
+    ResetPasswordScreen:"ResetPasswordScreen",
+    AccountVerificationScreen : "AccountVerificationScreen"
 }
 
 export const MainRoutes = {

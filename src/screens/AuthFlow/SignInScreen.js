@@ -12,7 +12,7 @@ import {
 import CustomTextInput from '../../components/TextInput';
 import CustomButton from '../../components/Button';
 import {useDispatch} from 'react-redux';
-import { Login } from "../../store/actions/LoginActions";
+import {Login} from '../../store/actions/LoginActions';
 import {commonStyles, textStyles} from '../../styles';
 import {AppScreenWidth, width} from '../../constants/sacling';
 import {scale} from 'react-native-size-matters';
@@ -23,19 +23,19 @@ import {colors} from '../../constants/theme';
 import GOOGLE from '../../assets/images/google.svg';
 import CustomHeader from '../../components/CustomHeader';
 import MICROSOFT from '../../assets/images/microsoft.svg';
-import { approverLogin } from '../../api';
+import {approverLogin} from '../../api';
 const SignInScreen = ({navigation}) => {
   const [email_address, setUseremail] = useState('');
   const [UseremailErrorMesage, setUseremailErrorMessaage] = useState('');
   const [password, setPassword] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-  const [is_api_error,  set_api_error] = useState("")
-  const [apiErrorMessage , setApiErrorMessage] = useState("")
+  const [is_api_error, set_api_error] = useState('');
+  const [apiErrorMessage, setApiErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const  userLogin = (data) => dispatch(Login(data))
+  const userLogin = data => dispatch(Login(data));
   const submitdate = () => {
-    set_api_error(false)
+    set_api_error(false);
     const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (!reg.test(email_address)) {
       setUseremailErrorMessaage('Please enter valid email');
@@ -50,94 +50,97 @@ const SignInScreen = ({navigation}) => {
     setLoading(true);
     setPasswordErrorMessage('');
     setUseremailErrorMessaage('');
-    let data ={
-      email_address:email_address,
-      userpassword:password,
-      type:"approver"
-    }
-    approverLogin(data).then((response) => {
-      setLoading(false);
-        if(response.status == 200){
-          if(response.data.status){
-           // console.log(response.data, "response.dataresponse.dataresponse.data");
-           userLogin(response.data)
-          }else{
-            setApiErrorMessage(response.data.error)
-            set_api_error(true)
+    let data = {
+      email_address: email_address,
+      userpassword: password,
+      type: 'approver',
+      approver: 1,
+    };
+    approverLogin(data)
+      .then(response => {
+        setLoading(false);
+        if (response.status == 200) {
+          if (response.data.status) {
+            //  console.log(response.data, "response.dataresponse.dataresponse.data");
+            userLogin(response.data);
+          } else {
+            setApiErrorMessage(response.data.error);
+            set_api_error(true);
           }
-        }else{
-          setApiErrorMessage(`Server Error ${response.status} occured. Please try again`)
-          set_api_error(true)
+        } else {
+          setApiErrorMessage(
+            `Server Error ${response.status} occured. Please try again`,
+          );
+          set_api_error(true);
         }
-    }).catch((err) => {
-      console.log(err);
-      setLoading(false);
-      setApiErrorMessage(`Server Error  occured. Please try again`)
-      set_api_error(true)
-    })
+      })
+      .catch(err => {
+        console.log(err);
+        setLoading(false);
+        setApiErrorMessage(`Server Error  occured. Please try again`);
+        set_api_error(true);
+      });
   };
   return (
-   
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.dark_primary_color}}>
       <View style={commonStyles.container}>
-          <CustomHeader 
-            title={"Sign In"}
-          />
-          <SafeAreaView style={{flex:1, backgroundColor:"#fff"}}>
-         
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                backgroundColor: '#fff',
-                flexGrow: 1,
-                alignItems: 'center',
-              }}>
-              <Image
-                resizeMode={'cover'}
-                resizeMethod={'resize'}
-                style={{width: width}}
-                source={require('../../assets/images/login.png')}
-              />
-              <CustomTextInput
-                placeholder={'Email Address'}
-                value={email_address}
-                onChangeText={text => setUseremail(text)}
-                errorMessage={UseremailErrorMesage}
-              />
-              <CustomTextInput
-                placeholder={'Password'}
-                value={password}
-                secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                errorMessage={passwordErrorMessage}
-              />
-              <View style={{alignSelf:"center", width:AppScreenWidth}}>
-              {is_api_error ?
-                <Text style={{...textStyles.errorText, textAlign:"left"}}>
-                  {apiErrorMessage}
-                </Text>
-                :null
-              }
-              </View>
-              <TouchableOpacity
-                onPress={() => navigation.navigate(AuthRoutes.ForgotPasswordScreen)}
-                style={{width: AppScreenWidth, alignItems: 'flex-end'}}>
-                <Text style={{...textStyles.title, color:colors.dark_primary_color}}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
+        <CustomHeader title={'Sign In'} />
 
-              <Spacer />
-              <CustomButton
-                onPress={() => submitdate()}
-                loading={loading}
-                text={'Login'}
-                loadingText={'Processing'}
-              />
-              <Spacer />
-              {/* <DrawLine height={0.6} />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            backgroundColor: '#fff',
+            flexGrow: 1,
+            alignItems: 'center',
+          }}>
+          <Image
+            resizeMode={'cover'}
+            resizeMethod={'resize'}
+            style={{width: width}}
+            source={require('../../assets/images/login.png')}
+          />
+          <CustomTextInput
+            placeholder={'Email Address'}
+            value={email_address}
+            onChangeText={text => setUseremail(text)}
+            errorMessage={UseremailErrorMesage}
+          />
+          <CustomTextInput
+            placeholder={'Password'}
+            value={password}
+            secureTextEntry={true}
+            onChangeText={text => setPassword(text)}
+            errorMessage={passwordErrorMessage}
+          />
+          <View style={{alignSelf: 'center', width: AppScreenWidth}}>
+            {is_api_error ? (
+              <Text style={{...textStyles.errorText, textAlign: 'left'}}>
+                {apiErrorMessage}
+              </Text>
+            ) : null}
+          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(AuthRoutes.ForgotPasswordScreen)}
+            style={{width: AppScreenWidth, alignItems: 'flex-end'}}>
+            <Text
+              style={{...textStyles.title, color: colors.dark_primary_color}}>
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+
+          <Spacer />
+          <CustomButton
+            onPress={() => submitdate()}
+            loading={loading}
+            text={'Login'}
+            loadingText={'Processing'}
+          />
+          <Spacer />
+          {/* <DrawLine height={0.6} />
               <Spacer /> */}
-              {/* <Text style={{...textStyles.Label, textAlign: 'center'}}>OR</Text> */}
-              {/* <View
+          {/* <Text style={{...textStyles.Label, textAlign: 'center'}}>OR</Text> */}
+          {/* <View
                 style={{
                   width: AppScreenWidth,
                   flexDirection: 'row',
@@ -168,16 +171,22 @@ const SignInScreen = ({navigation}) => {
                 </TouchableOpacity>
               </View> */}
 
-              <View
-                style={{width: width, position:"absolute", bottom:0, paddingBottom: 10, backgroundColor: '#fff'}}>
-                <Text style={textStyles.disabletext}>
-                  Copyright @{new Date().getFullYear()} RecruitBPM All Rights Reserved
-                </Text>
-              </View>
-            </ScrollView>
-        </SafeAreaView>
+          <View
+            style={{
+              width: width,
+              position: 'absolute',
+              bottom: 0,
+              paddingBottom: 10,
+              backgroundColor: '#fff',
+            }}>
+            <Text style={textStyles.disabletext}>
+              Copyright @{new Date().getFullYear()} RecruitBPM All Rights
+              Reserved
+            </Text>
+          </View>
+        </ScrollView>
       </View>
-   
+    </SafeAreaView>
   );
 };
 

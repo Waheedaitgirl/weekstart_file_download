@@ -24,7 +24,7 @@ const LeaveCard = memo(({item,onPress}) => {
                 <View style={{width:scale(20), height:scale(20)}} >
                     <Entypo size={scale(20)} name={"calendar"} color={colors.dark_primary_color} />
                 </View>
-                <Text style={styles.textStyle}>{moment(item.requested_date).format("YYYY-MM-DD HH:mm A")}</Text>
+                <Text style={styles.textStyle}>{moment(item.requested_date).format("DD-MMM-YYYY HH:mm A")}</Text>
             </View>
             <View   
                 style={styles.btnView}>
@@ -38,7 +38,7 @@ const LeaveCard = memo(({item,onPress}) => {
                 <View style={{width:scale(20), height:scale(20)}} >
                     <Entypo size={scale(20)} name={"calendar"} color={colors.dark_primary_color} />
                 </View>
-                <Text style={styles.textStyle}>{item.start_date} - {item.end_date}</Text>
+                <Text style={styles.textStyle}>{moment(item.start_date).format("DD-MMM-YYYY")} - {moment(item.end_date).format("DD-MMM-YYYY")}</Text>
             </View>
             <View   
                 style={styles.btnView}>

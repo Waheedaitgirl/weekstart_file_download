@@ -19,6 +19,7 @@ const TimeSheetItem = memo(({name, time, submittedto, status,status_style, conta
                 [arr[1].split(":")[0].trim(),arr[1].split(":")[1].trim()],
                 [arr[2].split(":")[0].trim(),arr[2].split(":")[1].trim()]
             ])
+           // return <View><Text>Hey</Text></View>
     return(
         <TouchableOpacity 
             style={styles.mainView}>
@@ -31,7 +32,7 @@ const TimeSheetItem = memo(({name, time, submittedto, status,status_style, conta
                         size={scale(18)} 
                     />
                 </View>
-                <Text style={styles.textStyle}>{time}</Text>
+                <Text style={styles.textStyle}>{time?.toString()}</Text>
             </View>
             <View   
                 style={styles.btnView}>
@@ -42,9 +43,9 @@ const TimeSheetItem = memo(({name, time, submittedto, status,status_style, conta
                         size={scale(18)} 
                     />
                 </View>
-                <Text style={styles.textStyle}>{name}</Text>
+                <Text style={styles.textStyle}>{name?.toString()}</Text>
             </View>
-            <View   
+            {/* <View   
                 style={styles.btnView}>
                 <View style={{width:scale(20), height:scale(20)}} >
                     <FontAwesome 
@@ -53,14 +54,19 @@ const TimeSheetItem = memo(({name, time, submittedto, status,status_style, conta
                         size={scale(18)} 
                     />
                 </View>
-                <Text style={styles.textStyle}>{submittedto}</Text>
-            </View>
+                <Text style={styles.textStyle}>{submittedto?.toString()}</Text>
+            </View> */}
             <View   
                 style={styles.btnView}>
                 <View style={{width:scale(20), height:scale(20)}} >
-                    <Person width={scale(20)} height={scale(20)} />
+                <FontAwesome 
+                        name="users" 
+                        color={colors.dark_primary_color} 
+                        size={scale(18)} 
+                    />
+                    {/* <Person width={scale(20)} height={scale(20)} /> */}
                 </View>
-                <Text style={styles.textStyle}>{contactname}</Text>
+                <Text style={styles.textStyle}>{contactname?.toString()}</Text>
             </View>
             <View   
                 style={styles.btnView}>

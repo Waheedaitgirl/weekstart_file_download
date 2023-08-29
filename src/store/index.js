@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
     const persistConfig = {
         key: 'root',
         storage: AsyncStorage,
-        whitelist: ['user','token','is_logged_in']
+        // whitelist: ['user','token','is_logged_in']
     };
     
     const rootReducer = combineReducers({

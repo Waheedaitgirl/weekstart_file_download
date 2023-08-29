@@ -6,6 +6,7 @@ import { AppScreenWidth } from "../../constants/sacling";
 import { fonts } from "../../constants/theme";
 import { textStyles } from "../../styles/textStyles";
 const CommentsBox = ({title, comment}) => {
+
     return(
         <View style={{marginTop:scale(5),width:AppScreenWidth, marginRight:scale(5)}} >
             <Text style={{...textStyles.smallheading, backgroundColor:"#0000"}}>{title}</Text>

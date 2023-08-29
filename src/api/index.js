@@ -2,12 +2,16 @@ import request from './request';
 
 // post requests with data
 export function approverLogin(data){
+    console.log('candidatemobilelogin')
     return request({
         url: 'candidatemobilelogin',
         method: 'post',
         data,
     });
 }
+
+ 
+
 
 export function getTimeSheetExpensesListByApprooverID(approver_id, approver_type, account_id){
     return request({
@@ -53,6 +57,9 @@ export function getStatusList(id){
 }
 
 export function getAllLeavesList(approver_id,account_id,approver_type,user_type,placement_approver_module_id, placement_approver_module_pk_id){
+    
+    console.log( `approver?approver_id=${approver_id}&status=all_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`);
+    
     return request({
         url: `approver?approver_id=${approver_id}&status=all_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`,
         method: 'get',
@@ -60,6 +67,7 @@ export function getAllLeavesList(approver_id,account_id,approver_type,user_type,
 }
 
 export function getUnapprovedLeavesList(approver_id,account_id,approver_type,user_type,placement_approver_module_id, placement_approver_module_pk_id){
+     console.log(`approver?approver_id=${approver_id}&status=all_unapproved_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`);
     return request({
         url: `approver?approver_id=${approver_id}&status=all_unapproved_leaves&account_id=${account_id}&approver_type=${approver_type}&user_type=${user_type}&placement_approver_module_id=${placement_approver_module_id}&placement_approver_module_pk_id=${placement_approver_module_pk_id}`,
         method: 'get',

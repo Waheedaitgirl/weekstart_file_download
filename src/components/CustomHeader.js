@@ -6,7 +6,7 @@ import { colors, fonts } from '../constants/theme';
 import { scale } from 'react-native-size-matters';
 import { commonStyles } from '../styles/commonStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
-const CustomHeader = ({isdrawer, show_backButton,title,onPress}) => {
+const CustomHeader = ({isdrawer, show_backButton,title,onPress,}) => {
     return (
       <View
         style={{
