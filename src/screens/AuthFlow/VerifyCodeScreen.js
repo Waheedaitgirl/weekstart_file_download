@@ -110,6 +110,7 @@ const VerifyCodeScreen = ({navigation}) => {
   };
 
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.dark_primary_color}}>
     <View style={commonStyles.container}>
       {/* <CustomHeader
         show_backButton={true}
@@ -372,6 +373,7 @@ const VerifyCodeScreen = ({navigation}) => {
                 /> */}
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 };
 

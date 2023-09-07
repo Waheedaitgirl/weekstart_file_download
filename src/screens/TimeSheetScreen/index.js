@@ -98,38 +98,17 @@ const TimeSheetListScreen = ({navigation}) => {
       || item?.time_sheet_view?.toLowerCase()?.includes(lowerTitle)
       || item?.time_sheet_id?.toLowerCase()?.includes(lowerTitle)
       || item?.module_status_name?.toLowerCase()?.includes(lowerTitle)
-      ||moment(item?.log_date).format("DD-MMM-YYYY HH:mm A").toString()?.includes(lowerTitle)
+      || ((item.time_sheet_view == 'Week') ? 'Week Starts at ' + getMonday(item.log_date) : 'Day ' + new Date(item.log_date).toDateString())?.toLowerCase()?.includes(lowerTitle)
       // || item?.log_date?.toLowerCase()?.includes(lowerTitle)
       || item?.hours?.toLowerCase()?.includes(lowerTitle)
       || item?.company_name?.toLowerCase()?.includes(lowerTitle)
       || item?.time_sheet_id?.toLowerCase()?.includes(lowerTitle)
     );
   });
-    // let draft_data = data?.filter(
-    //   item =>
-    //   item?.job_title?.toLowerCase()?.includes(lowerTitle)
-    //   ||item?.candidate_id?.toLowerCase()?.includes(lowerTitle)
-    //    || item?.module_status_id?.toLowerCase()?.includes(lowerTitle) ||
-    //   item?.candidate_name?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.time_sheet_view?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.time_sheet_id?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.module_status_name?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.log_date?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.hours?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.company_name?.toLowerCase()?.includes(lowerTitle)
-    //   || item?.time_sheet_id?.toLowerCase()?.includes(lowerTitle),
-    // );
-
-    // console.log(draft_data);
+  
     setFilterData(draft_data);
 
-    // return
-    // let se = title.toLowerCase()
-    // const regex = new RegExp(`${se}`);
-    // let draft_data = data.filter(function(item){
-    //     return item.module_status_name?.toLowerCase().match(regex) ||  item.comments?.toLowerCase().match(regex)
-    //  })
-    //  setFilterData(draft_data)
+ 
   };
   const getList = () => {
     setLoading(true);

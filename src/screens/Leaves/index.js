@@ -97,14 +97,7 @@ const AllLeavesScreen = ({navigation}) => {
     }
   };
 
-  //   const FilterByTitle = (title) => {
-  //     let se = title?.toLowerCase()
-  //     const regex = new RegExp(`${se}`);
-  //     let draft_data = data.filter(function(item){
-  //         return item.job_title?.toLowerCase().match(regex) || item.expense_report_title.toLowerCase().match(regex) ||  item.module_status_name.toLowerCase().match(regex)
-  //      })
-  //      setFilterData(draft_data)
-  // }
+  
 
   // moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase()?.includes(lowerTitle) ||
 
@@ -112,110 +105,62 @@ const AllLeavesScreen = ({navigation}) => {
     // const regex = new RegExp(`${lowerTitle} , "i"`);
     let lowerTitle = title.toLowerCase();
     let draft_data = data?.filter(item => {
+      console.log('chawal', item);
+
       let itemStatus = '';
-      if (item?.status === "0") {
+      if (item?.status === '0') {
         itemStatus = 'Pending';
-      } else if (item?.status === "1") {
-        itemStatus == 'Approved';
-      } else {
+      } else if (item?.status === '2') {
         itemStatus = 'Declined';
+      } else {
+        itemStatus = 'Approved';
       }
-      itemStatus=itemStatus?.toLowerCase()
-      console.log(
-        '----------->',
-        item?.status,
-        itemStatus
-      );
-      return (
+      itemStatus = itemStatus?.toLowerCase();
+      // console.log(
+      //   '----------->',
+      //   item?.status,
+      //   itemStatus
+      // );
+     return(
         item?.policy_name?.toLowerCase()?.includes(lowerTitle) ||
-        item?.policy_name?.toLowerCase()?.includes(lowerTitle) ||
-        item?.account_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.approved_by?.toLowerCase()?.includes(lowerTitle) ||
-        item?.approved_by_module_id?.toLowerCase()?.includes(lowerTitle) ||
-        moment(item?.approved_date)
-          .format('DD-MMM-YYYY HH:mm A')
-          .toLowerCase()
-          .includes(lowerTitle) ||
-        item?.approver_id?.toLowerCase()?.includes(lowerTitle) ||
         item?.candidate_name?.toLowerCase()?.includes(lowerTitle) ||
-        item?.city?.toLowerCase()?.includes(lowerTitle) ||
-        moment(item?.end_date)
-          .format('DD-MMM-YYYY')
-          .toLowerCase()
-          .includes(lowerTitle) ||
-        item?.is_half_day?.toLowerCase()?.includes(lowerTitle) ||
-        item?.is_paid?.toLowerCase()?.includes(lowerTitle) ||
-        item?.leave_policy_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.leave_request_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.maximum_leaves?.toLowerCase()?.includes(lowerTitle) ||
-        item?.module_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.requested_by?.toLowerCase()?.includes(lowerTitle) ||
+        // moment(item?.end_date)
+        //   .format('DD-MMM-YYYY')
+        //   ?.toLowerCase()
+        //   ?.includes(lowerTitle) ||
+
         moment(item?.requested_date)
           .format('DD-MMM-YYYY HH:mm A')
-          .toLowerCase()
+          ?.toLowerCase()
           ?.includes(lowerTitle) ||
         item?.requested_hours?.toLowerCase()?.includes(lowerTitle) ||
+        // `${moment(item?.start_date).format('DD-MMM-YYYY')} - ${moment(
+        //   item?.end_date,
+        // ).format('DD-MMM-YYYY')}`
         `${moment(item?.start_date).format('DD-MMM-YYYY')} - ${moment(
           item?.end_date,
         ).format('DD-MMM-YYYY')}`
-          .toLowerCase()
+          ?.toLowerCase()
           ?.includes(lowerTitle) ||
         item?.state_name?.toLowerCase()?.includes(lowerTitle) ||
-        itemStatus?.includes(lowerTitle) ||
-        moment(item?.updated_date)
-          .format('DD-MMM-YYYY')
-          .toLowerCase()
-          .includes(lowerTitle) ||
-        item?.username?.toLowerCase()?.includes(lowerTitle) ||
-        item?.approver_comments?.toLowerCase()?.includes(lowerTitle) ||
-        item?.comments?.toLowerCase()?.includes(lowerTitle)
-      );
+        itemStatus?.toLowerCase()?.includes(lowerTitle) ||
+        //  || moment(item?.updated_date).format('DD-MMM-YYYY')?.toLowerCase()?.includes(lowerTitle)
+        item?.username?.toLowerCase()?.includes(lowerTitle)
+      //   item?.approver_comments?.toLowerCase()?.includes(lowerTitle) ||
+      //   item?.comments?.toLowerCase()?.includes(lowerTitle)
+    );
     });
-    // let draft_data = data?.filter(item =>
-    //   item?.policy_name?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.policy_name?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.account_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.approved_by?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.approved_by_module_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.approved_date?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.approver_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.candidate_name?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.city?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.end_date?.toLowerCase()?.match(regex)
-    //   ||  item?.is_half_day?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.is_paid?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.leave_policy_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.leave_request_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.maximum_leaves?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.module_id?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.requested_by?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.requested_date?.toLowerCase()?.match(regex)
-    //   ||  item?.requested_hours?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.start_date?.toLowerCase()?.match(regex)
-    //   ||  item?.state_name?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.status?.toLowerCase()?.includes(lowerTitle)
 
-    //   ||  item?.updated_date?.toLowerCase()?.match(regex)
-
-    //   ||  item?.username?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.approver_comments?.toLowerCase()?.includes(lowerTitle)
-    //   ||  item?.comments?.toLowerCase()?.includes(lowerTitle)
-    //  ,
-    // );
-
-    // console.log(draft_data);
+    console.log(draft_data);
     setFilterData(draft_data);
-    // return;
-    // try {
-    //   let se = title.toLowerCase();
-    //   const regex = new RegExp(`${se}`);
-    //   let draft_data = data.filter(function (item) {
-    //     return item.policy_name?.toLowerCase().match(regex);
-    //   });
-    //   setFilterData(draft_data);
-    // } catch (err) {
-    //   setFilterData(data);
-    // }
+
+    // item?.is_half_day?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.is_paid?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.leave_policy_id?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.leave_request_id?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.maximum_leaves?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.module_id?.toLowerCase()?.includes(lowerTitle) ||
+    // item?.requested_by?.toLowerCase()?.includes(lowerTitle) ||
   };
   getLeavesListLocal = () => {
     setLoading(true);

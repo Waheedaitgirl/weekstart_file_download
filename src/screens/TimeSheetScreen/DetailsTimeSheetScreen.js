@@ -27,6 +27,7 @@ import CustomStatusBar from '../../components/StatusBar';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const DetailsSheetScreen = ({navigation, route}) => {
   const {user} = useSelector(state => state.LoginReducer);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ const DetailsSheetScreen = ({navigation, route}) => {
   const [logs, setLogs] = useState([]);
   const [time_types, setTimeTypes] = useState([]);
   const [error, setError] = useState(false);
+  const [ext, setExt] = useState(null);
   const [filepath, setFilePath] = useState({
     path: null,
     ext: null,
@@ -42,12 +44,18 @@ const DetailsSheetScreen = ({navigation, route}) => {
 
   let item = route.params.item;
   const status = item.module_status_name;
+  const getFileExtention = fileUrl => {
+    // To get the file extension
+    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+  };
+
+ 
 
   // console.log('item',item);
   useEffect(() => {
     timeSheetDetailsById(item.time_sheet_id, user.account_id)
       .then(response => {
-        console.log('pagal', response.data);
+        console.log('CheckREsponse', response.data);
         if (response.status === 200) {
           console.log(response);
           if (response.data.data.document_file !== null) {
@@ -62,6 +70,12 @@ const DetailsSheetScreen = ({navigation, route}) => {
           setTimeTypes(response.data.time_types);
           setLogs(Object.entries(data));
           setLoading(false);
+          let ext1 = getFileExtention(
+            'https://storage.googleapis.com/recruitbpm-document/production/' +
+            response.data?.data?.document_file
+          );
+    
+          setExt(ext1);
         } else {
           console.log('error', response.status);
           setError(true);
@@ -229,20 +243,18 @@ const DetailsSheetScreen = ({navigation, route}) => {
           />
 
           <TouchableOpacity
-          style={{width: 50, height: 50}}
-          onPress={() => {
-            navigation.navigate('ImageView', {
-              image: 'https://storage.googleapis.com/recruitbpm-document/' +
-              'production' +
-              '/' +
-              time_sheet_details.document_file,
-            });
-          }}
-
-
-          
-          >
-            <Image
+            disabled={!time_sheet_details?.document_file}
+            style={{width: 50, height: 50}}
+            onPress={() => {
+              navigation.navigate('ImageView', {
+                file:
+                  'https://storage.googleapis.com/recruitbpm-document/' +
+                  'production' +
+                  '/' +
+                  time_sheet_details.document_file,
+              });
+            }}>
+            {/* <Image
               style={styles.imageStyle}
               source={{
                 uri:
@@ -251,7 +263,35 @@ const DetailsSheetScreen = ({navigation, route}) => {
                   '/' +
                   time_sheet_details.document_file,
               }}
-            />
+            /> */}
+            {ext == 'pdf' ? (
+              <AntDesign
+                name={'pdffile1'}
+                color={'red'}
+                size={30}
+                style={{margin: 6}}
+              />
+            ) : ext == 'png' || ext == 'jpg' ? (
+              <Image
+                style={styles.imageStyle}
+                source={{
+                  uri:
+                    'https://storage.googleapis.com/recruitbpm-document/' +
+                    'production' +
+                    '/' +
+                    time_sheet_details.document_file,
+                }}
+              />
+            ) : ext == 'doc' || ext == 'docx' ? (
+              <AntDesign
+                name={'wordfile1'}
+                color={'blue'}
+                size={30}
+                style={{margin: 6}}
+              />
+            ) : (
+              <Text>No File Found!</Text>
+            )}
           </TouchableOpacity>
 
           {/* <CommentsBox

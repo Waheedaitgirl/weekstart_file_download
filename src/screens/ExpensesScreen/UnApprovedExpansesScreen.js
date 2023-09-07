@@ -76,30 +76,31 @@ const UnApprovedExpansesScreen = ({navigation, route}) => {
     // );
 
     let draft_data = data?.filter(item => {
-      console.log('item?.created_date',
-      moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase())
-      return (
+    
+      // console.log('FATIGUE',item);
+      // moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase())
+      let xitem = (
         item?.job_title?.toLowerCase()?.includes(lowerTitle) ||
-        item?.candidate_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.module_status_id?.toLowerCase()?.includes(lowerTitle) ||
+       
         item?.candidate_name?.toLowerCase()?.includes(lowerTitle) ||
-        moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase()?.includes(lowerTitle) ||
+        (moment(item.created_date).format('DD-MMM-YYYY'))?.toLowerCase()?.includes(lowerTitle) ||
         item?.expense_report_title?.toLowerCase()?.includes(lowerTitle) ||
         item?.module_status_name?.toLowerCase()?.includes(lowerTitle) ||
-        item?.total_amount?.toLowerCase()?.includes(lowerTitle) ||
-        item?.type?.toLowerCase()?.includes(lowerTitle)
+        parseFloat(item.total_amount).toFixed(2)?.toLowerCase()?.includes(lowerTitle) 
+         || item?.type?.toLowerCase()?.includes(lowerTitle)
       );
+
+      // console.log(xitem);
+
+
+
+      return xitem;
     });
 
-  //  console.log(draft_data);
+   console.log(draft_data);
     setFilterData(draft_data);
-    // return;
-    // let se = title.toLowerCase()
-    // const regex = new RegExp(`${se}`);
-    // let draft_data = data.filter(function(item){
-    //     return item?.job_title?.toLowerCase().match(regex) || item.expense_report_title.toLowerCase().match(regex) ||  item.module_status_name.toLowerCase().match(regex)
-    //  })
-    //  setFilterData(draft_data)
+    return;
+   
   };
   getExpensesList = () => {
     setLoading(true);
@@ -123,6 +124,7 @@ const UnApprovedExpansesScreen = ({navigation, route}) => {
          // console.log('WAHEEDA', response?.data);
           setData(organizeData);
           // setData(response.data.result);
+          setFilterData(organizeData);
           setLoading(false);
         } else {
           console.log('Some Error', response.status);
@@ -154,8 +156,10 @@ const UnApprovedExpansesScreen = ({navigation, route}) => {
       status_colour_code={item.status_colour_code}
       price={`$ ${parseFloat(item.total_amount).toFixed(2)}`}
       List={() => {
-        navigation.navigate(MainRoutes.ExpenseDetailsScreen, {item: item});
-      }}
+        navigation.navigate(MainRoutes.ExpenseDetailsScreen, {item,
+          onAccept: (id)=> AccpetExpense(id),
+          OnRejected:(id)=>RejectExpense(id)})} }
+      
     />
   );
   const onStatusHandler = useCallback((expense_id, statusCode) => {
@@ -299,7 +303,7 @@ const UnApprovedExpansesScreen = ({navigation, route}) => {
 
         <SwipeListView
           showsVerticalScrollIndicator={false}
-          data={data}
+          data={filterData}
           renderItem={renderItem}
           maxToRenderPerBatch={20}
           updateCellsBatchingPeriod={80}

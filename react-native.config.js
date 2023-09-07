@@ -4,9 +4,24 @@ module.exports = {
       android:{}
   },
   assets:['./assets/fonts/'],
+  iosAssets: [
+    "./src/font/ios",
+  ],
+  androidAssets: [
+    "./src/font/android",
+  ],
 }
 
-
+// ...
+// assets: [
+//   "./src/mp3",
+// ],
+// iosAssets: [
+//   "./src/font/ios",
+// ],
+// androidAssets: [
+//   "./src/font/android",
+// ],
 
 
 

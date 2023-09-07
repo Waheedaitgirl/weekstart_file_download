@@ -85,13 +85,9 @@ const AccountVerificationScreen = ({navigation, route}) => {
   
   };
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.dark_primary_color}}>
     <View style={commonStyles.container}>
-      {/* <CustomHeader 
-                    show_backButton={true}
-                    onPress={() => navigation.navigate(AuthRoutes.SignInScreen)}
-                    isdrawer={false}
-                    title={"Password Reset"}
-                /> */}
+     
       <CustomHeader
         show_backButton={true}
         onPress={() => navigation.navigate(AuthRoutes.SignInScreen)}
@@ -180,6 +176,7 @@ const AccountVerificationScreen = ({navigation, route}) => {
         /> */}
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 };
 

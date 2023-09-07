@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   SafeAreaView,
   Image,
@@ -24,8 +24,9 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 const UnApprovedLeavesScreens = ({navigation, route}) => {
-    // let isShowSearchBox = route?.params?.isAddSearchBox !=undefined ? route.params.isAddSearchBox :true;
-     let isShowFilter = route?.params?.isShowFilter !=undefined ? route.params.isShowFilter :true;
+  // let isShowSearchBox = route?.params?.isAddSearchBox !=undefined ? route.params.isAddSearchBox :true;
+  let isShowFilter =
+    route?.params?.isShowFilter != undefined ? route.params.isShowFilter : true;
   const {
     user,
     user_type,
@@ -44,28 +45,21 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
     () => {
       setFilterData(data);
     };
-
   }, []);
 
-
   const FilterByTitle = title => {
-    // const regex = new RegExp(`${lowerTitle} , "i"`);
     let lowerTitle = title.toLowerCase();
     let draft_data = data?.filter(item => {
       let itemStatus = '';
-      if (item?.status === "0") {
+      if (item?.status === '0') {
         itemStatus = 'Pending';
-      } else if (item?.status === "1") {
+      } else if (item?.status === '1') {
         itemStatus == 'Approved';
       } else {
         itemStatus = 'Declined';
       }
-      itemStatus=itemStatus?.toLowerCase()
-      console.log(
-        '----------->',
-        item?.status,
-        itemStatus
-      );
+      itemStatus = itemStatus?.toLowerCase();
+      console.log('----------->', item?.status, itemStatus);
       return (
         item?.policy_name?.toLowerCase()?.includes(lowerTitle) ||
         item?.policy_name?.toLowerCase()?.includes(lowerTitle) ||
@@ -147,11 +141,10 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
     setFilterData(draft_data);
   };
 
-
   getLeavesListLocal = () => {
-     setLoading(true);
-  getUnapprovedLeavesList(
-    user.id,
+    setLoading(true);
+    getUnapprovedLeavesList(
+      user.id,
       user.account_id,
       '2',
       user_type,
@@ -163,6 +156,7 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
 
         if (response.status == 200) {
           setData(response.data.data);
+          setFilterData(response.data.data);
           setLoading(false);
         } else {
           console.log('Some Error', response.status);
@@ -192,7 +186,7 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
           onPress: () => {
             statusCode === 1
               ? AccpetExpense(leave_request_id)
-              : RejectExpense(leave_request_id);
+              : RejectLeaves(leave_request_id);
           },
           style: 'cancel',
         },
@@ -208,9 +202,7 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
   const renderHiddenItem = (data, rowMap) => {
     return (
       <View style={styles.HiddenBtnView}>
-
-
-       <Pressable
+        <Pressable
           style={styles.Acceptbtn}
           onPress={() => onStatusHandler(data.item.leave_request_id, 1)}>
           <Ionicons name="checkmark" color={'#fff'} size={scale(22)} />
@@ -305,8 +297,8 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
             isShowFilter={isShowFilter}
             SearchPress={text => FilterByTitle(text)}
             // SearchPress={() => alert("Search Press")}
-            NotificationPress={() => alert("NotificationPress")}
-            FilterPress={(data) => alert(data)}
+            NotificationPress={() => alert('NotificationPress')}
+            FilterPress={data => alert(data)}
             onPress={() => navigation.goBack()}
             title={'UnApproved Leaves'}
           />
@@ -325,17 +317,17 @@ const UnApprovedLeavesScreens = ({navigation, route}) => {
           isdrawer={false}
           SearchPress={text => FilterByTitle(text)}
           // isShowSearch={isShowSearchBox}
-        isShowFilter={isShowFilter}
+          isShowFilter={isShowFilter}
           //  SearchPress={() => alert("Search Press")}
-          NotificationPress={() => alert("NotificationPress")}
-          FilterPress={(data) => alert(data)}
+          NotificationPress={() => alert('NotificationPress')}
+          FilterPress={data => alert(data)}
           onPress={() => navigation.goBack()}
           title={'UnApproved Leaves'}
         />
 
         <SwipeListView
           showsVerticalScrollIndicator={false}
-          data={data} //data
+          data={filterData} //data
           renderItem={renderItem}
           maxToRenderPerBatch={20}
           updateCellsBatchingPeriod={80}
