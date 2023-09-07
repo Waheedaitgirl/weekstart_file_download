@@ -30,6 +30,7 @@
     "react-native-date-picker": "^4.2.0",
     "react-native-dialog": "^9.2.1",
     "react-native-document-picker": "^8.0.0",
+    "react-native-file-viewer": "^2.1.5",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.3.0",
     "react-native-image-crop-picker": "^0.37.3",

@@ -94,8 +94,10 @@ const ForgotPasswordScreen = ({navigation}) => {
    
   };
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.dark_primary_color}}>
     <View style={commonStyles.container}>
-      <CustomHeader
+     
+       <CustomHeader
         show_backButton={true}
         onPress={() => navigation.navigate(AuthRoutes.SignInScreen)}
         isdrawer={false}
@@ -166,6 +168,7 @@ const ForgotPasswordScreen = ({navigation}) => {
         )}
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 };
 

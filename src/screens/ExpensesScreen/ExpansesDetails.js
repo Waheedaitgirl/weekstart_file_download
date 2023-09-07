@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useCallback} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Text,
   Image,
@@ -8,6 +8,7 @@ import {
   View,
   StyleSheet,
   Alert,
+  Pressable,
 } from 'react-native';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -29,8 +30,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-// import RNFetchBlob from 'rn-fetch-blob';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
+// Import FontAwesome icons (you can use other icon libraries as well)
 
 const Item = ({
   date,
@@ -39,96 +41,106 @@ const Item = ({
   category,
   amount,
   filename,
+  expense_receipt,
   approver_comments,
   expense_comments,
+  Linking,
 }) => {
+  const getFileExtention = fileUrl => {
+    // To get the file extension
+    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+  };
   const navigation = useNavigation();
+  const [ext, setExt] = useState(null);
+  useEffect(()=>{
+    setExt(getFileExtention(filename));
+  },[])
   return (
-    <View style={styles.CardView}>
-      <View style={styles.row}>
-        <View>
-          <Text style={styles.buleText}> Expense Date:</Text>
-          <Text style={styles.title}>{date}</Text>
-        </View>
-        <View>
-          <Text style={styles.buleText}>Expense Type:</Text>
-          <Text style={styles.title}>{expense_type}</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View>
-          <Text style={styles.buleText}>Bill Type:</Text>
-          <Text style={styles.title}>{bill_type}</Text>
-        </View>
-        <View>
-          <Text style={styles.buleText}>Category:</Text>
-          <Text style={styles.title}>{category}</Text>
-        </View>
-      </View>
-
-      <View style={styles.row}>
-        <View>
-          <Text style={styles.buleText}>Amount:</Text>
-          <Text includeFontPadding={false} style={styles.ButtonText}>
-            ${amount}
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.buleText}>Receipt:</Text>
-          <TouchableOpacity
-            style={{width: 50, height: 50}}
-            onPress={() => {
-              navigation.navigate('ImageView', {
-                image: filename,
-              });
-            }}>
-            <Image
-              style={styles.imageStyle}
-              source={{
-                uri: filename,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      {/* {approver_comments !== null && approver_comments !== '' && (
-        <View style={styles.row}>
-          <Text style={styles.buleText}>Approver Comment:</Text>
-          <Text style={styles.title}>{approver_comments}</Text>
-        </View>
-      )}
-      {expense_comments !== null && expense_comments !== '' && (
+    <View style={{width: AppScreenWidth}}>
+      <View style={styles.CardView}>
         <View style={styles.row}>
           <View>
-            <Text style={styles.buleText}>Comments:</Text>
-            <Text style={styles.title}>{expense_comments}</Text>
+            <Text style={styles.buleText}> Expense Date:</Text>
+            <Text style={styles.title}>{date}</Text>
+          </View>
+          <View>
+            <Text style={styles.buleText}>Expense Type:</Text>
+            <Text style={styles.title}>{expense_type}</Text>
           </View>
         </View>
-      )} */}
-     
+
+        <View style={styles.row}>
+          <View>
+            <Text style={styles.buleText}>Bill Type:</Text>
+            <Text style={styles.title}>{bill_type}</Text>
+          </View>
+          <View>
+            <Text style={styles.buleText}>Category:</Text>
+            <Text style={styles.title}>{category}</Text>
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <View>
+            <Text style={styles.buleText}>Amount:</Text>
+            <Text includeFontPadding={false} style={styles.ButtonText}>
+              ${amount}
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.buleText}>Receipt:</Text>
+            {/* <Text style={styles.title}>{filename}</Text>   */}
+
+            <TouchableOpacity
+              disabled={!filename}
+              style={{width: 50, height: 50}}
+              onPress={() => {
+                navigation.navigate('ImageView', {
+                  file: filename,
+                });
+              }}>
+              {/* <Image
+                style={styles.imageStyle}
+                source={{
+                  uri: filename,
+                }}
+              /> */}
+              {ext == 'pdf' ? (
+                <AntDesign name={'pdffile1'} color={'red'} size={30} style={{margin:6}} />
+              ) : ext == 'png' || ext == 'jpg' ? (
+                <Image
+                style={styles.imageStyle}
+                  source={{uri: filename}}
+                />
+              ) : ext == 'doc' || ext == 'docx' ? (
+                <AntDesign name={'wordfile1'} color={'blue'} size={30} style={{margin:6}} />
+              ) : (
+                <Text>No File Found!</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </View>
   );
 };
-{/* <View Style = {{height :50, width : 50, marginTop: 70}}> */}
 
-<TouchableOpacity style ={{width: '90%',height: 40,borderRadius: 10,justifyContent:"center",alignItems:"center",backgroundColor: 'blue',alignSelf:'center'}}>
-
-</TouchableOpacity>
-// </View>
-const ExpenseDetailsScreen = ({navigation, route}) => {
-  let item = route.params.item;
+const ExpenseDetailsScreen = ({navigation, route, fileUrl, fileName}) => {
+  // const fileExtension = fileName?.split('.')?.pop();
   const [logs, setLogs] = useState([]);
   const {user} = useSelector(state => state.LoginReducer);
   const [isModalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  let item = route.params.item;
+  const status = item.module_status_name;
+  //  console.log('item',item);
   useEffect(() => {
     getExpensesDetails(user.account_id, item.expense_id)
       .then(response => {
         if (response.status === 200) {
-          console.log(response.data.logs);
+          // console.log(response.data.logs);
           setLoading(false);
           setLogs(response.data.logs);
         } else {
@@ -142,10 +154,11 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
         console.log(err, 'Error');
       });
   }, []);
+
   const onStatusHandler = useCallback((expense_id, statusCode) => {
     Alert.alert(
       'Attention!',
-      `Are you sure want to ${statusCode === 0 ? 'Reject' : 'Approve'}?`,
+      `Are you Sure want to ${statusCode === 0 ? 'Reject' : 'Approve'}?`,
       [
         {
           text: 'No',
@@ -155,97 +168,22 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
           text: 'Yes',
           onPress: () => {
             statusCode === 1
-              ? AccpetExpense(expense_id)
-              : RejectExpense(expense_id);
+              ? route.params?.onAccept(expense_id)
+              : route.params?.OnRejected(expense_id);
+
+            navigation?.goBack();
           },
           style: 'cancel',
         },
       ],
     );
   }, []);
-  const renderHiddenItem = (data, rowMap) => {
-    return (
-      // <View style={styles.HiddenBtnView}>
-      <>
-        <Pressable
-          style={styles.Acceptbtn}
-          onPress={() => onStatusHandler(data.item.expense_id, 1)}>
-          <Ionicons name="checkmark" color={'#fff'} size={scale(22)} />
-          <Text style={{...textStyles.Label, color: '#fff'}}>Approve</Text>
-        </Pressable>
-        <Pressable
-          style={styles.RejectBtn}
-          onPress={() => onStatusHandler(data.item.expense_id, 0)}>
-          <MaterialIcons name="cancel" color={'#fff'} size={scale(22)} />
-          <Text style={{...textStyles.Label, color: '#fff'}}>Reject</Text>
-        </Pressable>
-        </>
-     // </View>
-    );
-  };
 
-  const AccpetExpense = id => {
-    let module_status_id = status
-      .filter(
-        obj =>
-          obj.module_id === MODULE_ID && obj.module_status_name === 'Approved',
-      )
-      .map(o => o.module_status_id)[0];
-    AcceptOrRejectTimeSheetOrExpenses(
-      user.account_id,
-      user.id,
-      '2',
-      id,
-      module_status_id,
-    )
-      .then(response => {
-        if (response.status) {
-          getExpensesList();
-          alert('Expense request accepted successfully');
-        } else {
-          alert('Error While Accepting');
-        }
-      })
-      .catch(err => {
-        alert(err.message);
-      });
-  };
-
-  const RejectExpense = id => {
-    let module_status_id = status
-      .filter(
-        obj =>
-          obj.module_id === MODULE_ID && obj.module_status_name === 'Rejected',
-      )
-      .map(o => o.module_status_id)[0];
-    AcceptOrRejectTimeSheetOrExpenses(
-      user.account_id,
-      user.id,
-      '2',
-      id,
-      module_status_id,
-    )
-      .then(response => {
-        if (response.status) {
-          getExpensesList();
-          alert('Expense request rejected successfully');
-        } else {
-          alert('Error While Rejecting');
-        }
-      })
-      .catch(err => {
-        alert(err.message);
-      });
-  };
-
-  // const onRowDidOpen = rowKey => {
-  //   console.log('This row opened', rowKey);
-  // };
   if (loading) {
     return (
       <SafeAreaProvider>
         <CustomStatusBar />
-       
+
         <SafeAreaView style={commonStyles.container}></SafeAreaView>
         <View style={commonStyles.container}>
           <CustomHeader
@@ -257,55 +195,6 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
           <Spacer height={AppScreenWidth} />
           <ActivityIndicator size={'large'} color={colors.dark_primary_color} />
         </View>
-        <SwipeListView
-          showsVerticalScrollIndicator={false}
-          data={data}
-          // renderItem={renderItem}
-          maxToRenderPerBatch={20}
-          updateCellsBatchingPeriod={80}
-          initialNumToRender={20}
-          windowSize={35}
-          bounces={false}
-          renderHiddenItem={renderHiddenItem}
-          rightOpenValue={-130}
-          previewRowKey={'0'}
-          previewOpenValue={-40}
-          previewOpenDelay={3000}
-          // onRowDidOpen={onRowDidOpen}
-          keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={() => {
-            return (
-              <View
-                style={{
-                  alignSelf: 'center',
-                  marginTop: verticalScale(150),
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                {error ? (
-                  <Image
-                    source={require('../../assets/images/error.gif')}
-                    style={{
-                      width: verticalScale(150),
-                      height: verticalScale(150),
-                      resizeMode: 'contain',
-                    }}
-                  />
-                ) : (
-                  <Image
-                    source={require('../../assets/images/norecord.gif')}
-                    style={{
-                      width: verticalScale(150),
-                      height: verticalScale(150),
-                      resizeMode: 'contain',
-                    }}
-                  />
-                )}
-              </View>
-            );
-          }}
-        />
       </SafeAreaProvider>
     );
   }
@@ -328,7 +217,8 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
               height: verticalScale(150),
               resizeMode: 'contain',
             }}
-          />\        </View>
+          />{' '}
+        </View>
       </SafeAreaProvider>
     );
   }
@@ -343,25 +233,27 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
           title={'Expense Detail'}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <ExpansesItem
-            item={item}
-            billtype={item.expense_report_title}
-            type={
-              item.type === 'employee' ? item.candidate_name : item.username
-            }
-            status={item.module_status_name}
-            date={moment(item.created_date).format('DD-MMM-YYYY')}
-            job={item.job_title}
-            status_colour_code={item.status_colour_code}
-            price={`$ ${parseFloat(item.total_amount).toFixed(2)}`}
-            onPress={() => {
-              navigation.navigate(MainRoutes.ExpenseDetailsScreen, {
-                item: item,
-              });
-            }}
-          />
+          {item && (
+            <ExpansesItem
+              // item={item}
+              billtype={item.expense_report_title}
+              type={
+                item.type === 'employee' ? item.candidate_name : item.username
+              }
+              status={item.module_status_name}
+              date={moment(item.created_date).format('DD-MMM-YYYY')}
+              job={item.job_title}
+              status_colour_code={item.status_colour_code}
+              price={`$ ${parseFloat(item.total_amount).toFixed(2)}`}
+              onPress={() => {}}
+              // navigation.navigate(MainRoutes.ExpenseDetailsScreen, {
+              //   item: item,
+              // });
+              // }}
+            />
+          )}
           {logs.map((item, index) => {
-            console.log('item->>',item);
+            console.log('item->>', item);
 
             return (
               <View key={`${index}`}>
@@ -374,10 +266,12 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
                   // approver_comments={item.approver_comments}
                   expense_comments={item.expense_comments}
                   filename={
-                    'https://storage.googleapis.com/recruitbpm-document/' +
-                    item.subdomain + 
-                    '/' +
-                    item.expense_receipt
+                    item.expense_receipt != null
+                      ? 'https://storage.googleapis.com/recruitbpm-document/' +
+                        item.subdomain +
+                        '/' +
+                        item.expense_receipt
+                      : null
                   }
                 />
               </View>
@@ -385,6 +279,41 @@ const ExpenseDetailsScreen = ({navigation, route}) => {
           })}
           <Spacer />
         </ScrollView>
+        <View style={styles.HiddenBtnView}>
+          {item.module_status_name === 'Submitted' ? (
+            <>
+              <Pressable
+                style={styles.Acceptbtn}
+                onPress={() => onStatusHandler(item.expense_id, 1)}>
+                <Ionicons name="checkmark" color={'#fff'} size={scale(22)} />
+                <Text style={{...textStyles.Label, color: '#fff'}}>
+                  Approve
+                </Text>
+              </Pressable>
+              <View style={{height: 1}} />
+              <Pressable
+                style={styles.RejectBtn}
+                onPress={() => onStatusHandler(item.expense_id, 0)}>
+                <MaterialIcons name="cancel" color={'#fff'} size={scale(22)} />
+                <Text style={{...textStyles.Label, color: '#fff'}}>Reject</Text>
+              </Pressable>
+            </>
+          ) : item.module_status_name === 'Rejected' ? (
+            <Pressable
+              style={styles.Acceptbtn}
+              onPress={() => onStatusHandler(item.expense_id, 1)}>
+              <Ionicons name="checkmark" color={'#fff'} size={scale(22)} />
+              <Text style={{...textStyles.Label, color: '#fff'}}>Approve</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              style={styles.RejectBtn}
+              onPress={() => onStatusHandler(item.expense_id, 0)}>
+              <MaterialIcons name="cancel" color={'#fff'} size={scale(22)} />
+              <Text style={{...textStyles.Label, color: '#fff'}}>Reject</Text>
+            </Pressable>
+          )}
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -439,33 +368,39 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
-  // HiddenBtnView: {
-  //   backgroundColor: '#fff',
-  //   alignItems: 'flex-end',
-  //   height: '100%',
-  //   justifyContent: 'center',
-  //   paddingHorizontal: scale(20),
-  //   paddingVertical: scale(20),
-  // },
   Acceptbtn: {
     paddingVertical: 5,
     backgroundColor: 'green',
     flex: 1,
     borderRadius: 5,
-    marginBottom: 10,
+    // marginBottom: 10,
     borderWidth: 0,
-    width: scale(100),
+    marginHorizontal: 24,
+    // width: scale(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
   RejectBtn: {
     paddingVertical: 5,
+    marginHorizontal: 24,
     flex: 1,
     backgroundColor: colors.delete_icon,
     borderRadius: 5,
     borderWidth: 0,
     justifyContent: 'center',
-    width: scale(100),
+    //width: scale(100),
     alignItems: 'center',
+  },
+
+  HiddenBtnView: {
+    marginTop: 24,
+    marginBottom: 170,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    //  alignItems: 'flex-end',
+    //  height: '100%',
+    justifyContent: 'center',
+    // paddingHorizontal: scale(20),
+    //  paddingVertical: scale(20),
   },
 });

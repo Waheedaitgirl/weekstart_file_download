@@ -15,7 +15,7 @@ import Person from '../../assets/images/person.svg'
 import Job from '../../assets/images/job.svg'
 import transform from 'css-to-react-native';
 import { RFValue } from "react-native-responsive-fontsize";
-FontAwesome.loadFont();
+ FontAwesome.loadFont();
 const ExpansesItem = memo(({item, billtype, type, status,date,List, job,status_colour_code, price,user_id}) => {
     let arr = (status_colour_code.split(";"))
     const [isVisible ,setIsVisible] = useState(false)
@@ -27,7 +27,7 @@ const ExpansesItem = memo(({item, billtype, type, status,date,List, job,status_c
         
     return(
         <TouchableOpacity 
-            activeOpacity={1}
+            // activeOpacity={1}
             onPress={List}
             style={styles.mainView}>
             <View   

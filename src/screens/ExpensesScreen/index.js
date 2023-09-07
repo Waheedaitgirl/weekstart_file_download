@@ -35,6 +35,15 @@ const AllExpenseScreen = ({navigation}) => {
   const {user} = useSelector(state => state.LoginReducer);
   const [endDate, setEndDate] = useState('');
   const {status} = useSelector(state => state.StatusReducer);
+
+  const [local_status] = useState(
+    status
+      .filter(
+        obj =>
+          obj.module_id === MODULE_ID && obj.module_status_name === 'Submitted',
+      )
+      .map(o => o.module_status_id)[0],
+  );
   const [accept_loading, setAcceptLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
   const [reject_loading, setRejectLoading] = useState(false);
@@ -42,7 +51,7 @@ const AllExpenseScreen = ({navigation}) => {
   const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  // const[accepted,rejected] = useState(true);
+ 
   const [error_message, setErrorMessage] = useState('');
   useEffect(() => {
     getExpensesList();
@@ -51,52 +60,6 @@ const AllExpenseScreen = ({navigation}) => {
       setFilterData(data);
     };
   }, []);
-
-  const FilterByTitle = title => {
-    //  let item = data[0].job_title?.toLowerCase();
-    // console.log('title',title,item);
-    let lowerTitle = title.toLowerCase();
-
-    // console.log('item?.created_date',item?.created_date,lowerTitle)
-    // let draft_data = data?.filter(
-    //   item =>
-    //     item?.job_title?.toLowerCase()?.includes(lowerTitle)
-    //     ||item?.candidate_id?.toLowerCase()?.includes(lowerTitle)
-    //      || item?.module_status_id?.toLowerCase()?.includes(lowerTitle) ||
-    //     item?.candidate_name?.toLowerCase()?.includes(lowerTitle)
-    //     || item?.created_date?.toLowerCase()?.includes(lowerTitle)
-    //     || item?.expense_report_title?.toLowerCase()?.includes(lowerTitle)
-    //     || item?.module_status_name?.toLowerCase()?.includes(lowerTitle)
-    //     || item?.total_amount?.toLowerCase()?.includes(lowerTitle)
-    //     || item?.type?.toLowerCase()?.includes(lowerTitle),
-    // );
-
-    let draft_data = data?.filter(item => {
-      console.log('item?.created_date',
-      moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase())
-      return (
-        item?.job_title?.toLowerCase()?.includes(lowerTitle) ||
-        item?.candidate_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.module_status_id?.toLowerCase()?.includes(lowerTitle) ||
-        item?.candidate_name?.toLowerCase()?.includes(lowerTitle) ||
-        moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase()?.includes(lowerTitle) ||
-        item?.expense_report_title?.toLowerCase()?.includes(lowerTitle) ||
-        item?.module_status_name?.toLowerCase()?.includes(lowerTitle) ||
-        item?.total_amount?.toLowerCase()?.includes(lowerTitle) ||
-        item?.type?.toLowerCase()?.includes(lowerTitle)
-      );
-    });
-
-  //  console.log(draft_data);
-    setFilterData(draft_data);
-    return;
-    // let se = title.toLowerCase()
-    // const regex = new RegExp(`${se}`);
-    // let draft_data = data.filter(function(item){
-    //     return item?.job_title?.toLowerCase().match(regex) || item.expense_report_title.toLowerCase().match(regex) ||  item.module_status_name.toLowerCase().match(regex)
-    //  })
-    //  setFilterData(draft_data)
-  };
 
   const onFilterList = type => {
     // alert(type)
@@ -123,7 +86,7 @@ const AllExpenseScreen = ({navigation}) => {
 
         break;
       case 'Submitted':
-        // console.log('filterData', data);
+        console.log('filterData', data);
         let filterDataThree = [...data];
         // setData(
         //   filterData.filter(obj => obj.module_status_name === 'Submitted'),
@@ -137,13 +100,50 @@ const AllExpenseScreen = ({navigation}) => {
         return;
     }
   };
+
+  const FilterByTitle = title => {
+    //  let item = data[0].job_title?.toLowerCase();
+    // console.log('title',title,item);
+    let lowerTitle = title.toLowerCase();
+
+    let draft_data = data?.filter(item => {
+      console.log('FATIGUE', item);
+      // moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase())
+      return (
+        item?.job_title?.toLowerCase()?.includes(lowerTitle) ||
+        item?.candidate_name?.toLowerCase()?.includes(lowerTitle) ||
+        moment(item.created_date)
+          .format('DD-MMM-YYYY')
+          ?.toLowerCase()
+          ?.includes(lowerTitle) ||
+         item?.expense_report_title?.toLowerCase()?.includes(lowerTitle) ||
+        item?.module_status_name?.toLowerCase()?.includes(lowerTitle) ||
+        parseFloat(item.total_amount)
+          .toFixed(2)
+          ?.toLowerCase()
+          ?.includes(lowerTitle) ||
+        item?.type?.toLowerCase()?.includes(lowerTitle)
+      );
+
+      // console.log(xitem);
+    });
+
+    //  console.log(draft_data);
+    setFilterData(draft_data);
+  };
+
   getExpensesList = () => {
     setLoading(true);
-    // console.log(user?.id, '2', user?.account_id);
-    getTimeSheetExpensesListByApprooverID(user?.id, '2', user?.account_id)
+    console.log('[Testing]', user?.id, '2', user?.account_id);
+    getTimeSheetExpensesListByApprooverID(
+      user?.id,
+      '2',
+      user?.account_id,
+      local_status,
+    )
       .then(response => {
         if (response.status == 200) {
-          // console.log('WAHEEDA', response.data.data);
+          console.log('WAHEEDA', response.data.data);
           let organizeData = response?.data?.data?.sort((a, b) => {
             return new Date(b.created_date) - new Date(a.created_date);
           });
@@ -179,8 +179,11 @@ const AllExpenseScreen = ({navigation}) => {
       job={item.job_title}
       status_colour_code={item.status_colour_code}
       price={`$ ${parseFloat(item.total_amount).toFixed(2)}`}
-      List={() => {
-        navigation.navigate(MainRoutes.ExpenseDetailsScreen, {item: item});
+      List={() => {navigation.navigate(MainRoutes.ExpenseDetailsScreen, {
+          item,
+          onAccept: id => AccpetExpense(id),
+          OnRejected: id => RejectExpense(id),
+        });
       }}
     />
   );
@@ -274,7 +277,7 @@ const AllExpenseScreen = ({navigation}) => {
       .then(response => {
         setAcceptLoading(false);
         if (response.status === 200) {
-         // console.log(response);
+          // console.log(response);
           getExpensesList();
           alert('Expense request accepted successfully');
         } else {
@@ -333,7 +336,8 @@ const AllExpenseScreen = ({navigation}) => {
             SearchPress={text => FilterByTitle(text)}
             // SearchPress={() => alert("Search Press")}
             NotificationPress={() => alert('NotificationPress')}
-            FilterPress={data => alert(data)}
+            FilterPress={data => onFilterList(data)}
+            // FilterPress={data => alert(data)}
             onPress={() => navigation.goBack()}
             title={'All Expenses'}
           />

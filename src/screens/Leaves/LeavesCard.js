@@ -7,6 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import moment from "moment"
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 const LeaveCard = memo(({item,onPress}) => {
       return(
         <View 
@@ -22,6 +23,13 @@ const LeaveCard = memo(({item,onPress}) => {
             <View   
                 style={styles.btnView}>
                 <View style={{width:scale(20), height:scale(20)}} >
+                    <FontAwesome  size={scale(20)} name={"user"} color={colors.dark_primary_color} />
+                </View>
+                <Text style={styles.textStyle}>{item.candidate_name}</Text>
+            </View>
+            <View   
+                style={styles.btnView}>
+                <View style={{width:scale(20), height:scale(20)}} >
                     <Entypo size={scale(20)} name={"calendar"} color={colors.dark_primary_color} />
                 </View>
                 <Text style={styles.textStyle}>{moment(item.requested_date).format("DD-MMM-YYYY HH:mm A")}</Text>
@@ -31,7 +39,7 @@ const LeaveCard = memo(({item,onPress}) => {
                 <View style={{width:scale(20), height:scale(20)}} >
                 <Entypo size={scale(20)} name={"time-slot"} color={colors.dark_primary_color} />
                 </View>
-                <Text style={styles.textStyle}>{item.requested_hours} Hours</Text>
+                <Text style={styles.textStyle}>{item?.requested_hours} Hours</Text>
             </View>
             <View   
                 style={styles.btnView}>

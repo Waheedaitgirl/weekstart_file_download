@@ -63,14 +63,14 @@ const UnApprovedTimeSheetListScreen = ({navigation,route}) => {
     console.log('item?.created_date',
     moment(item?.created_date).format("DD-MMM-YYYY").toLowerCase())
     return (
-        item?.job_title?.toLowerCase()?.includes(lowerTitle)
+      item?.job_title?.toLowerCase()?.includes(lowerTitle)
       ||item?.candidate_id?.toLowerCase()?.includes(lowerTitle)
        || item?.module_status_id?.toLowerCase()?.includes(lowerTitle) ||
       item?.candidate_name?.toLowerCase()?.includes(lowerTitle)
       || item?.time_sheet_view?.toLowerCase()?.includes(lowerTitle)
       || item?.time_sheet_id?.toLowerCase()?.includes(lowerTitle)
       || item?.module_status_name?.toLowerCase()?.includes(lowerTitle)
-      ||moment(item?.log_date).format("DD-MMM-YYYY HH:mm A").toString()?.includes(lowerTitle)
+      || ((item.time_sheet_view == 'Week') ? 'Week Starts at ' + getMonday(item.log_date) : 'Day ' + new Date(item.log_date).toDateString())?.toLowerCase()?.includes(lowerTitle)
       // || item?.log_date?.toLowerCase()?.includes(lowerTitle)
       || item?.hours?.toLowerCase()?.includes(lowerTitle)
       || item?.company_name?.toLowerCase()?.includes(lowerTitle)
@@ -127,6 +127,7 @@ const UnApprovedTimeSheetListScreen = ({navigation,route}) => {
           );
          console.log('WAHEEDA', response?.data?.result);
           setData(organizeData);
+          setFilterData(organizeData)
 
           //paste the function here
           setLoading(false);
@@ -161,7 +162,9 @@ const UnApprovedTimeSheetListScreen = ({navigation,route}) => {
       status={item.module_status_name}
       status_style={item.status_colour_code}
       hours={`${item.hours} Hours`}
-      onPress={() => navigation.navigate(MainRoutes.DetailsSheetScreen, {item})}
+      onPress={() => navigation.navigate(MainRoutes.DetailsSheetScreen, {item,
+        onAccept: (id)=> AccpetTimeSheet(id),
+        OnRejected:(id)=>RejectTimeSheet(id)})}
       onEdit={() => navigation.navigate(MainRoutes.EditTimeSheetScreen, {item})}
       onDelete={() => getList()}
     />
@@ -309,7 +312,7 @@ const UnApprovedTimeSheetListScreen = ({navigation,route}) => {
 
         <SwipeListView
           showsVerticalScrollIndicator={false}
-          data={data}
+          data={filterData}
           bounces={false}
           renderItem={renderItem}
           maxToRenderPerBatch={20}
