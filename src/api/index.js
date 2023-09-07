@@ -2,7 +2,6 @@ import request from './request';
 
 // post requests with data
 export function approverLogin(data){
-    console.log('candidatemobilelogin')
     return request({
         url: 'candidatemobilelogin',
         method: 'post',

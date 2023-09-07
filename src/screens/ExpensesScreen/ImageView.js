@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Image,
   PermissionsAndroid,
@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {scale} from 'react-native-size-matters';
-// import RNFetchBlob from "rn-fetch-blob";
-import CameraRoll from '@react-native-community/cameraroll';
-import {Alert} from 'react-native';
+import { scale } from 'react-native-size-matters';
+
+import { Alert } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
-import {HamburgerIcon} from 'native-base';
+import { HamburgerIcon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { set } from 'react-native-reanimated';
@@ -22,13 +21,13 @@ const getFileExtention = fileUrl => {
   return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
 };
 
-const ImageViewScreen = ({route}) => {
+const ImageViewScreen = ({ route }) => {
   const [visible, setIsVisible] = useState(true);
   const [pastedURL, setPastedURL] = useState('');
   const [ext, setExt] = useState(null);
   useEffect(() => {
-     setExt(getFileExtention(route?.params?.file));
-  Platform.OS==='android' &&  requestStoragePermission();
+    setExt(getFileExtention(route?.params?.file));
+    Platform.OS === 'android' && requestStoragePermission();
   }, []);
   const requestStoragePermission = async () => {
     try {
@@ -54,14 +53,44 @@ const ImageViewScreen = ({route}) => {
     }
   };
 
-  const downloadImage = () => {
-    let date = new Date();
+  const downloadImage = async () => {
+    let date = new Date()
 
     // ..............File URl which we want to download ................ ///
 
     let Url = route?.params?.file;
+    console.log('Url', Url);
+    let ext = getFileExtension(Url)
+    try {
+      // Step 1: Create a path where the file will be saved
+      const { dirs } = RNFetchBlob.fs;
+      let nameOfFile = `${Math.floor(date.getTime() + date.getSeconds() / 2)}.${ext}`
+      const filePath = `${dirs.DownloadDir}/${nameOfFile}`;
 
-    const {config, fs} = RNFetchBlob;
+      // Step 2: Perform the file download
+      const response = await RNFetchBlob.config({
+        fileCache: true,
+        path: filePath,
+      }).fetch('GET', Url);
+
+      // Step 3: Check the HTTP response status
+      if (response.info().status === 200) {
+        console.log(`File downloaded to: ${filePath}`);
+        Alert.alert('File downloaded Successfully')
+        return filePath;
+      } else {
+        Alert.alert('Download failed. HTTP Status:', response.info().status)
+        console.error('Download failed. HTTP Status:', response.info().status);
+        return null;
+      }
+    } catch (error) {
+      Alert.alert('Error downloading file:', error);
+      console.error('Error downloading file:', error);
+      return null;
+    }
+    return;
+
+    const { config, fs } = RNFetchBlob;
     let RootDir = fs.dirs.PictureDir; // this is the pictures directory. You can check the available directories in the wiki.
     let options = {
       fileCache: true,
@@ -134,14 +163,12 @@ const ImageViewScreen = ({route}) => {
         console.log(res.path(), 'file saved to');
         // Alert.alert('File downloaded successfully');
       });
-    // } else {
-    //   CameraRoll.saveToCameraRoll(Url);
-    // }
+
   };
 
- 
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {/* <ImageView
         images={[{uri: route?.params.image}]}
         imageIndex={0}
@@ -149,14 +176,14 @@ const ImageViewScreen = ({route}) => {
         onRequestClose={() => setIsVisible(false)}
       /> */}
 
-      <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 0.8, justifyContent: 'center', alignItems: 'center' }}>
         {ext == 'pdf' ? (
           <AntDesign name={'pdffile1'} color={'red'} size={100} />
         ) : ext == 'png' || ext == 'jpg' ? (
           <Image
-            style={{width: '100%', height: '80%'}}
+            style={{ width: '100%', height: '80%' }}
             resizeMode="contain"
-            source={{uri: route?.params.file}}
+            source={{ uri: route?.params.file }}
           />
         ) : ext == 'doc' || ext == 'docx' ? (
           <AntDesign name={'wordfile1'} color={'blue'} size={100} />
@@ -164,13 +191,13 @@ const ImageViewScreen = ({route}) => {
           <Text>No File Found!</Text>
         )}
       </View>
-      <View style={{flex: 0.2}}>
+      <View style={{ flex: 0.2 }}>
         <TouchableOpacity
           onPress={() => {
             if (route?.params.file !== '') {
-              console.log('PATH URL', route?.params.file);
+              // console.log('PATH URL', route?.params.file);
               downloadImage();
-              Alert.alert('file downloaded successfully');
+              // Alert.alert('file downloaded successfully');
             } else {
               Alert.alert('Please add file');
             }
@@ -193,7 +220,7 @@ const ImageViewScreen = ({route}) => {
           ) : (
             <Entypo />
           )} */}
-          <Text style={{color: 'white'}}>Download </Text>
+          <Text style={{ color: 'white' }}>Download </Text>
         </TouchableOpacity>
       </View>
     </View>

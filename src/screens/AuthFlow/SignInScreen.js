@@ -59,6 +59,8 @@ const SignInScreen = ({navigation}) => {
     approverLogin(data)
       .then(response => {
         setLoading(false);
+        console.log(response.status)
+        console.log(response.data)
         if (response.status == 200) {
           if (response.data.status) {
             //  console.log(response.data, "response.dataresponse.dataresponse.data");
@@ -75,7 +77,7 @@ const SignInScreen = ({navigation}) => {
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log('err',err);
         setLoading(false);
         setApiErrorMessage(`Server Error  occured. Please try again`);
         set_api_error(true);
