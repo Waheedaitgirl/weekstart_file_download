@@ -367,6 +367,7 @@ const AllExpenseScreen = ({navigation}) => {
         />
 
         <SwipeListView
+       
           showsVerticalScrollIndicator={false}
           data={filterData}
           renderItem={renderItem}

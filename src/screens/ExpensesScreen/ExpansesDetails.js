@@ -184,17 +184,18 @@ const ExpenseDetailsScreen = ({navigation, route, fileUrl, fileName}) => {
       <SafeAreaProvider>
         <CustomStatusBar />
 
-        <SafeAreaView style={commonStyles.container}></SafeAreaView>
-        <View style={commonStyles.container}>
+        {/* <SafeAreaView style={commonStyles.container}></SafeAreaView> */}
           <CustomHeader
             show_backButton={true}
             isdrawer={false}
             onPress={() => navigation.goBack()}
             title={'Expenses Details'}
           />
-          <Spacer height={AppScreenWidth} />
+        {/* <View style={commonStyles.container}> */}
+        
+         <Spacer height={AppScreenWidth} />
           <ActivityIndicator size={'large'} color={colors.dark_primary_color} />
-        </View>
+          
       </SafeAreaProvider>
     );
   }
@@ -232,7 +233,9 @@ const ExpenseDetailsScreen = ({navigation, route, fileUrl, fileName}) => {
           onPress={() => navigation.goBack()}
           title={'Expense Detail'}
         />
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+        
+        showsVerticalScrollIndicator={false}>
           {item && (
             <ExpansesItem
               // item={item}
